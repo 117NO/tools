@@ -12,6 +12,7 @@ class post(Base):
     post_content    =   Column(String)
     post_date       =   Column(DateTime)
     post_author    =   Column(String)
+    JSID         =   Column(Integer)
 
 
 class user(Base):
@@ -21,4 +22,5 @@ class user(Base):
     user_email      =   Column(String)
     user_url        =   Column(String)
     user_status     =   Column(Integer)
+    JSID         =   Column(Integer)
 
