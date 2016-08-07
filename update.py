@@ -11,7 +11,7 @@ from table import *
 SrcDB   = {"host":"127.0.0.1", "port":3306, "user":"root", "passwd":"", "dbname":"wordpress", "charset":"utf8"}
 DstDB   = {"host":"127.0.0.1", "port":3306, "user":"root", "passwd":"", "dbname":"test", "charset":"utf8"}
 
-# 1. 将需要修改的表定义为一个类
+# 1. 将需要修改的表定义为一个类,放在table.py或者table文件夹 
 # 2. 将类名放入TableClasses列表中 
 TableClasses = [post,user]
 #本地的表的基本信息 Tables[tablename] = TableInfo
