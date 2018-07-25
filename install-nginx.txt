@@ -1,0 +1,78 @@
+  
+【准备】
+yum -y  install  wget 
+mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+yum clean all
+yum makecache
+yum -y  update
+
+vim /etc/yum.conf
+#exclude=kernel*
+yum install -y kernel-headers  gcc gcc-c++ vim lrzsz  telnet  net-tools unzip
+
+【nginx】
+(ubuntu/debian:  apt-get install  nginx)
+vim /etc/yum.repos.d/nginx.repo
+[nginx]
+name=nginx repo
+baseurl=http://nginx.org/packages/centos/$releasever/$basearch/
+gpgcheck=0    
+enabled=1
+yum -y  install nginx
+service nginx start
+chkconfig nginx on
+
+【mariadb】
+(ubuntu/debian:  apt-get install mysql-server)
+vim /etc/yum.repos.d/mariadb.repo
+[mariadb]
+name = MariaDB
+baseurl = http://yum.mariadb.org/10.1/centos7-amd64
+gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+gpgcheck=1
+(https://downloads.mariadb.org/mariadb/repositories/ 查询最新官方仓库)
+yum -y  install mariadb-server mariadb-client
+service mariadb start
+chkconfig mariadb on
+默认密码为空 mysqladmin -u root password '123'
+
+【php7】
+(ubuntu/debian:  apt-get install  build-essential  libxml2 libxml2-dev openssl libssl-dev make curl libcurl4-gnutls-dev libjpeg-dev libpng-dev libfreetype6 libfreetype6-dev libmcrypt-dev libreadline6 libreadline6-dev)
+yum install -y autoconf
+yum install -y libxml2 libxml2-devel
+yum install -y curl curl-devel
+yum install -y libjpeg-devel libpng-devel    
+yum install -y freetype-devel
+yum install libmcrypt libmcrypt-devel
+./configure --prefix=/usr/local/ --with-mcrypt=/usr/include  --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-mysql-sock=/var/lib/mysql/mysql.sock --with-gd --with-iconv --with-zlib --enable-xml --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization --enable-fpm --enable-mbstring --enable-ftp --enable-gd-native-ttf  --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --without-pear --with-gettext --enable-session --with-curl --with-freetype-dir
+make -j4
+make install
+groupadd nobody
+mv  /usr/local/etc/php-fpm.conf.default  /usr/local/etc/php-fpm.conf
+mv  /usr/local/etc/php-fpm.d/www.conf.default  /usr/local/etc/php-fpm.d/www.conf
+
+【wordpress】
+wget http://wordpress.org/latest.tar.gz
+tar -xzf latest.tar.gz
+mv wordpress /usr/share/nginx/
+vim /usr/share/nginx/wp-config.php
+vim /etc/nginx/conf.d/default.conf
+   location ~ \.php$ {
+        root           /usr/share/nginx/wordpress;
+        fastcgi_pass   127.0.0.1:9000;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+        include        fastcgi_params;
+    }
+
+【配置】
+vim /etc/sysconfig/selinux
+SELINUX=disabled
+iptables -I INPUT -p tcp --dport 80  -j ACCEPT
+
+vim /etc/rc.local
+service mariadb start
+service nginx start
+/usr/local/sbin/php-fpm
+iptables -I INPUT -p tcp --dport 80  -j ACCEPT

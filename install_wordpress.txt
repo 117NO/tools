@@ -1,0 +1,41 @@
+pt-get install mysql-server
+apt-get install nginx
+apt-get install php5
+apt-get install php5-fpm
+apt-get install php5-mysql
+create database wordpress default charset utf8;
+wget  http://wordpress.org/latest.tar.gz
+tar -xzf latest.tar.gz
+mv wordpress  /usr/share/nginx/
+vim /etc/nginx/sites-enabled/default【注1】
+vim  /usr/share/nginx/wordpress/wp-config-sample.php【注2】
+mv   /usr/share/nginx/wordpress/wp-config-sample.php  /usr/share/nginx/wordpress/wp-config.php
+nginx -s reload
+
+apt-get install python3
+apt-get install python3-pip
+
+【注1】
+ root /usr/share/nginx/wordpress;
+ index index.php;
+ 取消注释即可：
+   location ~ \.php$ {
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        # NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
+
+        # With php5-cgi alone:
+    #   fastcgi_pass 127.0.0.1:9000;
+        # With php5-fpm:
+        fastcgi_pass unix:/var/run/php5-fpm.sock;
+        fastcgi_index index.php;
+        include fastcgi_params;
+    }
+
+【注2】
+define('DB_NAME', 'wordpress');
+define('DB_USER', 'user');
+define('DB_PASSWORD', '123');
+define('DB_HOST', 'localhost');
+define('DB_CHARSET', 'utf8');
+
+

@@ -1,0 +1,43 @@
+  
+参考 http://wiki.ubuntu.org.cn/InstallingVMWare
+准备工作
+为了生成和运行VMWare，我们先得安装一些生成程序的必要工具。这些工具统一放在build-essential这个软件包里。我们还将要用到 一些关于所使用的linux内核的信息，这些信息包含在“linux-headers-<kernelversion>”中的头文件里，这里 的<kernelversion>表示您的linux内核版本。 
+
+您可以使用以下命令确定您的内核版本：
+uname -r
+
+然后通过这条命令安装前面提到的软件包：
+sudo apt-get install build-essential linux-headers-<kernelversion>
+
+
+安装：
+
+[root@localhost vmware]# chmod +x VMware-Workstation-Full-10.0.0-1295980.i386.bundle
+[root@localhost vmware]# ./VMware-Workstation-Full-10.0.0-1295980.i386.bundle
+
+卸载:
+
+kartook@moon:~$ vmware-installer -l 
+Product Name           Product Version
+====================== ====================
+vmware-workstation     7.0.0.203739
+
+kartook@moon:~$ sudo vmware-installer -u vmware-workstation
+
+
+ 
+使用.tar.gz的源码包编译的吧。下载.tar.gz的包后，解压，执行安装脚本，并配置安装。
+这里以VMware-workstation-e.x.p-91182.i386.tar.gz为例。
+
+[root@localhost vmware]# tar -zxvf  VMware-workstation-e.x.p-91182.i386.tar.gz
+[root@localhost vmware]# cd vmware-distrib
+[root@localhost vmware-distrib]#./vmware-install.pl
+
+
+
+有的人可能会遇到，不断地提示“What is the location of the directory of C header files that match your running kernel? [/usr/src/linux/include]”
+其实，这个就是因为系统中没有相应的内核源码包和开发包造成的。
+
+ubuntu13.04 安装vmware-workstation9.0.2无法输入序列号问题解决
+直接在终端输入：
+sudo /usr/lib/vmware/bin/vmware-vmx --new-sn JV2ZX-8R10P-MZV89-E98NK-9A8LM 
