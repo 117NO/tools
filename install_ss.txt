@@ -1,14 +1,10 @@
-pt-get install  python-pip
-apt-get install  python-mysqldb
-pip install Django==1.9.2
-pip install flask
-
+apt install  python-pip
+apt install  python-setuptools
 pip install shadowsocks
-pip install m2crypto
 vim ssconf.json
 {
     "server":"xx.xx.xx.xx",
-    "server_port":443,
+    "server_port":8080,
     "local_address": "127.0.0.1",
     "local_port":1080,
     "password":"12345",
@@ -16,4 +12,11 @@ vim ssconf.json
     "method":"aes-256-cfb",
     "fast_open": false
 }
-ssserver -c ssconf.json -d --log-file shadowsocks.log
+ssserver -c ssconf.json -d start
+#ok!
+
+
+apt-get install  python-mysqldb
+pip install m2crypto
+pip install Django==1.9.2
+pip install flask
